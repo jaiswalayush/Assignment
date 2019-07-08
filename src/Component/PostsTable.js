@@ -17,7 +17,8 @@ const PostsTable = (props) => {
             changed={props.changed}
             isDirty={post.isDirty}
             save={props.save}
-            delete={props.delete} />
+            delete={props.delete}
+            reset = {props.reset}/>
     )
 
     return (

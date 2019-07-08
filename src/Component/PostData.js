@@ -35,6 +35,11 @@ const PostData = (props) =>
                 onClick={() => props.delete(props.id)}>
                 Delete
             </button>
+            <button type="button"
+                className={props.isEditable ? props.isDirty ? "btn btn-outline-warning btn-block visible" : "btn btn-outline-secondary btn-block visible" : "btn btn-outline-warning btn-block invisible"}
+                onClick={() => props.reset(props.id)}>
+                {props.isDirty ? 'Reset' : 'Cancel'}
+            </button>
         </td>
     </tr>
 
