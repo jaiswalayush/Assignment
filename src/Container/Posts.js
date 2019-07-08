@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PostsTable from '../Component/PostsTable';
 import Api from '../Services/PostsEndpoint';
+import Error from '../Component/Error';
 
 
 class Post extends Component {
     state = {
-        posts: []
+        posts: [],
+        isError: false
     }
 
     apiHelper = new Api();
@@ -21,7 +23,10 @@ class Post extends Component {
                         isDirty: false
                     }
                 })
-                this.setState({ posts: modifiedPosts })
+                this.setState({ posts: modifiedPosts, isError: false })
+            })
+            .catch(er => {
+                this.setState({ isError: true });
             });
     }
 
@@ -54,8 +59,10 @@ class Post extends Component {
         this.apiHelper.patch(id, patchData)
             .then(response => {
                 const successData = this.state.posts.map(post => post.id === response.data.id ? { ...post, isEditable: false, isDirty: false } : post);	//Modifies post collection to reflect edited data
-                this.setState({ posts: successData });
+                this.setState({ posts: successData, isError: false });
                 this.originalValue.splice(this.originalValue.findIndex(val => val.id === id), 1);
+            }).catch(er => {
+                this.setState({ isError: true });
             })
     }
 
@@ -70,9 +77,11 @@ class Post extends Component {
 
         this.apiHelper.delete(id, deleteData)
             .then(response => {
-                this.setState({ posts: successData });
+                this.setState({ posts: successData, isError: false });
                 updateOriginalValue();
-            });
+            }).catch(er => {
+                this.setState({ isError: true });
+            })
     }
 
     onResetHandler = (id) => {
@@ -84,15 +93,24 @@ class Post extends Component {
         }
     }
 
+    onRetry = () => {
+        const data = this.state.posts;
+        this.setState({ posts: data, isError: false });
+    }
+
     render() {
         return (
-            <PostsTable
-                posts={this.state.posts}
-                edit={this.isEditableHandler}
-                changed={this.onChangeHandler}
-                save={this.onSaveHandler}
-                delete={this.onDeleteHandler}
-                reset={this.onResetHandler} />
+            this.state.isError ? <Error error={this.state.isError} retry={this.onRetry} /> :
+                this.state.posts.length > 0 ?
+                    <PostsTable
+                        posts={this.state.posts}
+                        edit={this.isEditableHandler}
+                        changed={this.onChangeHandler}
+                        save={this.onSaveHandler}
+                        delete={this.onDeleteHandler}
+                        reset={this.onResetHandler} />
+                    : <Error error={false} retry={this.onRetry} />
+
         );
     }
 }
