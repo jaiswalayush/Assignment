@@ -28,7 +28,7 @@ class Post extends Component {
     isEditableHandler = (id) => {
 
         //To retain the previous value of edited post for Reset action
-        this.originalValue.push(...this.state.posts.filter(x=>x.id===id));
+        this.originalValue.push(...this.state.posts.filter(x => x.id === id));
 
         const editablePosts = this.state.posts.map(post => post.id === id ? { ...post, isEditable: true } : post);
         this.setState({ posts: editablePosts });
@@ -55,7 +55,7 @@ class Post extends Component {
             .then(response => {
                 const successData = this.state.posts.map(post => post.id === response.data.id ? { ...post, isEditable: false, isDirty: false } : post);	//Modifies post collection to reflect edited data
                 this.setState({ posts: successData });
-                this.originalValue.splice(this.originalValue.findIndex(val => val.id ===id),1);
+                this.originalValue.splice(this.originalValue.findIndex(val => val.id === id), 1);
             })
     }
 
@@ -65,7 +65,7 @@ class Post extends Component {
         const deleteData = { title: data.title, body: data.body, userId: data.userId };
         const index = this.state.posts.findIndex(post => post.id === id);
         const successData = this.state.posts;
-        const updateOriginalValue = () =>this.originalValue.splice(index,1);
+        const updateOriginalValue = () => this.originalValue.splice(index, 1);
         successData.splice(index, 1);	//Modified post collection by removing deleted post
 
         this.apiHelper.delete(id, deleteData)
@@ -75,12 +75,12 @@ class Post extends Component {
             });
     }
 
-    onResetHandler = (id) =>{
-        const originalValue = this.originalValue.filter(val => val.id ===id);
-        if(originalValue){
-            const modifiedArr = this.state.posts.map(post=>post.id===id ? originalValue[0] : post);
-            this.setState({posts:modifiedArr});
-            this.originalValue.splice(this.originalValue.findIndex(val => val.id ===id),1);
+    onResetHandler = (id) => {
+        const originalValue = this.originalValue.filter(val => val.id === id);
+        if (originalValue) {
+            const modifiedArr = this.state.posts.map(post => post.id === id ? originalValue[0] : post);
+            this.setState({ posts: modifiedArr });
+            this.originalValue.splice(this.originalValue.findIndex(val => val.id === id), 1);
         }
     }
 
@@ -92,7 +92,7 @@ class Post extends Component {
                 changed={this.onChangeHandler}
                 save={this.onSaveHandler}
                 delete={this.onDeleteHandler}
-                reset = {this.onResetHandler}/>
+                reset={this.onResetHandler} />
         );
     }
 }

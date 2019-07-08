@@ -5,7 +5,7 @@ import PostData from './PostData'
 
 const PostsTable = (props) => {
 
-    let PostsArray = props.posts.map(post =>
+    const PostsArray = props.posts.map(post =>
         <PostData
             key={post.id}
             userId={post.userId}
@@ -18,17 +18,19 @@ const PostsTable = (props) => {
             isDirty={post.isDirty}
             save={props.save}
             delete={props.delete}
-            reset = {props.reset}/>
+            reset={props.reset} />
     )
+
+    const textAlignStyle = "text-center";
 
     return (
         <div className="table-responsive">
             <table className="table table-striped table-hover mt-2 mb-2">
                 <thead className="thead-dark sticky-top" >
                     <tr>
-                        <th className="text-center">Post Title</th>
-                        <th className="text-center">Post Body</th>
-                        <th className="text-center">Action</th>
+                        <th className={textAlignStyle}>Post Title</th>
+                        <th className={textAlignStyle}>Post Body</th>
+                        <th className={textAlignStyle}>Action</th>
                     </tr>
                 </thead>
                 <tbody>
