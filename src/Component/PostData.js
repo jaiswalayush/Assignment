@@ -12,6 +12,15 @@ const PostData = (props) => {
     const deleteButtonStyle = "btn btn-outline-danger btn-block";
     const editableBoxStyle = "form-control";
     const textAlignStyle = "align-top";
+    const diabledButtonStyle = "btn btn-danger btn-block progress-bar-striped progress-bar-animated";
+    let buttonRef = null;
+
+    const disableButtonOnClick = () =>{
+        buttonRef.className = diabledButtonStyle ;
+        buttonRef.innerText = "Wait...";
+        buttonRef.disabled=true;
+        return props.delete(props.id)
+    }
 
     return (<tr>
         <td className={textAlignStyle}>
@@ -45,8 +54,9 @@ const PostData = (props) => {
             </button>
             <button type="button"
                 className={deleteButtonStyle}
-                onClick={() => props.delete(props.id)}>
-                Delete
+                ref={(button_ref)=>{buttonRef = button_ref}}
+                onClick={()=>disableButtonOnClick()}>
+                 Delete
             </button>
             <button type="button"
                 className={props.isEditable ? props.isDirty ? resetButtonStyle : cancelButtonstyle : hideCancelButton}
